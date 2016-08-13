@@ -22,16 +22,16 @@ ifeq ($(strip $(CIRCLEHOME)),)
 CIRCLEHOME = ..
 endif
 
--include $(CIRCLEHOME)/Config.mk
+-include $(CIRCLEHOME)/Config-llvm.mk
 
 RASPPI	?= 1
 PREFIX	?= arm-linux-gnueabihf-
 
-CC	= $(PREFIX)gcc
-CPP	= $(PREFIX)g++
-AS	= $(CC)
-LD	= $(PREFIX)ld
-AR	= $(PREFIX)ar
+CC	?= $(PREFIX)gcc
+CPP	?= $(PREFIX)g++
+AS	?= $(CC)
+LD	?= $(PREFIX)ld
+AR	?= $(PREFIX)ar
 
 ifeq ($(strip $(RASPPI)),1)
 ARCH	?= -march=armv6j -mtune=arm1176jzf-s -mfloat-abi=hard 
@@ -44,7 +44,7 @@ endif
 INCLUDE	+= -I $(CIRCLEHOME)/include -I $(CIRCLEHOME)/addon -I $(CIRCLEHOME)/app/lib
 
 AFLAGS	+= $(ARCH) -DRASPPI=$(RASPPI) $(INCLUDE)
-CFLAGS	+= $(ARCH) -Wall -Wno-psabi -fsigned-char -fno-builtin -nostdinc -nostdlib \
+CFLAGS	+= $(ARCH) -Wall -Wno-unknown-attributes -fsigned-char -fno-builtin -nostdinc -nostdlib \
 	   -D__circle__ -DRASPPI=$(RASPPI) $(INCLUDE) -O -g #-DNDEBUG
 CPPFLAGS+= $(CFLAGS) -fno-exceptions -fno-rtti -std=c++0x
 
