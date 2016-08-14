@@ -22,7 +22,7 @@ ifeq ($(strip $(CIRCLEHOME)),)
 CIRCLEHOME = ..
 endif
 
--include $(CIRCLEHOME)/Config-llvm.mk
+-include $(CIRCLEHOME)/Config.mk
 
 RASPPI	?= 1
 PREFIX	?= arm-linux-gnueabihf-
