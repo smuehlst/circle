@@ -46,7 +46,7 @@ INCLUDE	+= -I $(CIRCLEHOME)/include -I $(CIRCLEHOME)/addon -I $(CIRCLEHOME)/app/
 AFLAGS	+= $(ARCH) -DRASPPI=$(RASPPI) $(INCLUDE)
 CFLAGS	+= $(ARCH) -Wall -Wno-unknown-attributes -fsigned-char -fno-builtin -nostdinc -nostdlib \
 	   -D__circle__ -DRASPPI=$(RASPPI) $(INCLUDE) -O -g #-DNDEBUG
-CPPFLAGS+= $(CFLAGS) -fno-exceptions -fno-rtti -std=c++0x
+CPPFLAGS+= $(CFLAGS) -fno-exceptions -fno-rtti -std=c++14
 
 %.o: %.S
 	$(AS) $(AFLAGS) -c -o $@ $<

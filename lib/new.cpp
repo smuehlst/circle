@@ -38,3 +38,18 @@ void operator delete[] (void *pBlock) noexcept
 {
 	free (pBlock);
 }
+
+#if __cplusplus >= 201402L
+/*
+ * Implementation of C++14 delete operators
+ */
+void operator delete (void *pBlock, unsigned) noexcept
+{
+	::operator delete (pBlock);
+}
+
+void operator delete[] (void *pBlock, unsigned) noexcept
+{
+	::operator delete [] (pBlock);
+}
+#endif
