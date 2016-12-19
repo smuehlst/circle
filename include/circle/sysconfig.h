@@ -49,15 +49,10 @@
 #define MEM_PAGE_TABLE1		(MEM_IRQ_STACK + EXCEPTION_STACK_SIZE * (CORES-1))
 #endif
 
-// On Raspberry Pi 3 we need a coherent memory region (1 section) for the property mailbox.
-// This does not work with rpi_stub on Raspberry Pi 2 so we stay here with the previous
-// solution (also to reduce test effort).
-#if RASPPI == 3
+// coherent memory region (1 section) for the property mailbox
 #define MEM_COHERENT_REGION	0x400000
+
 #define MEM_HEAP_START		0x500000
-#else
-#define MEM_HEAP_START		0x400000
-#endif
 
 // system options
 #if RASPPI == 1			// valid on Raspberry Pi 1 only
@@ -73,12 +68,18 @@
 #endif
 #endif
 
+// Optimizes IRQ latency, disables some features
+//#define REALTIME
+
 #define MAX_TASKS		20
 #define TASK_STACK_SIZE		0x4000
 
 // default keyboard map (enable only one)
 #define DEFAULT_KEYMAP		"DE"
 //#define DEFAULT_KEYMAP		"ES"
+//#define DEFAULT_KEYMAP		"FR"
+//#define DEFAULT_KEYMAP		"IT"
 //#define DEFAULT_KEYMAP		"UK"
+//#define DEFAULT_KEYMAP		"US"
 
 #endif

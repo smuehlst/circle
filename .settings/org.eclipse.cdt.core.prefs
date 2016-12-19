@@ -1,6 +1,6 @@
 eclipse.preferences.version=1
 environment/project/cdt.managedbuild.toolchain.gnu.cross.base.1993159235/PATH/delimiter=;
 environment/project/cdt.managedbuild.toolchain.gnu.cross.base.1993159235/PATH/operation=replace
-environment/project/cdt.managedbuild.toolchain.gnu.cross.base.1993159235/PATH/value=C\:\\Windows\\system32;C\:\\Windows;C\:\\Windows\\System32\\Wbem;C\:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C\:\\Program Files\\Git\\cmd;C\:\\Program Files\\Git\\usr\\bin;C\:\\Users\\stm\\gnuwin32\\bin;C\:\\Program Files (x86)\\GNU Tools ARM Embedded\\5.4 2016q2\\bin
+environment/project/cdt.managedbuild.toolchain.gnu.cross.base.1993159235/PATH/value=C\:\\Windows\\system32;C\:\\Windows;C\:\\Windows\\System32\\Wbem;C\:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C\:\\Program Files\\Git\\cmd;C\:\\Program Files\\Git\\usr\\bin;E\:\\Users\\stm\\local\\gnuwin32\\bin;E\:\\Users\\stm\\local\\gcc-arm-none-eabi-5_4-2016q3-20160926-win32\\bin
 environment/project/cdt.managedbuild.toolchain.gnu.cross.base.1993159235/append=true
 environment/project/cdt.managedbuild.toolchain.gnu.cross.base.1993159235/appendContributed=true
