@@ -66,7 +66,7 @@ $(TARGET).img: $(OBJS) $(LIBS) $(CIRCLEHOME)/lib/startup.o $(CIRCLEHOME)/circle.
 	$(LD) -o $(TARGET).elf -Map $(TARGET).map -T $(CIRCLEHOME)/circle.ld $(CIRCLEHOME)/lib/startup.o $(OBJS) $(LIBS)
 	$(OBJDUMP) -d kernel.elf | $(CPPFILT) > kernel.lst
 	$(OBJCOPY) kernel.elf -O binary kernel.img
-	# wc -c kernel.img
+	wc -c kernel.img
 
 clean:
 	rm -f *.o *.a *.elf *.lst *.img *.cir *.map *~ $(EXTRACLEAN)
