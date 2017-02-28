@@ -63,17 +63,29 @@ CInterruptSystem::~CInterruptSystem (void)
 	s_pThis = 0;
 }
 
+#if 0
+void __attribute__((interrupt("FIQ"))) __attribute__((naked)) FIQStub(void)
+{
+	PeripheralEntry ();
+
+	PeripheralExit();
+}
+#else
+extern void FIQStub(void);
+#endif
+
 boolean CInterruptSystem::Initialize (void)
 {
 	TExceptionTable *pTable = (TExceptionTable *) ARM_EXCEPTION_TABLE_BASE;
 	pTable->IRQ = ARM_OPCODE_BRANCH (ARM_DISTANCE (pTable->IRQ, IRQStub));
+	pTable->FIQ = ARM_OPCODE_BRANCH (ARM_DISTANCE (pTable->FIQ, FIQStub));
 
 	SyncDataAndInstructionCache ();
 
 #ifndef USE_RPI_STUB_AT
 	PeripheralEntry ();
 
-	write32 (ARM_IC_FIQ_CONTROL, 0);
+	// write32 (ARM_IC_FIQ_CONTROL, 0);
 
 	write32 (ARM_IC_DISABLE_IRQS_1, (u32) -1);
 	write32 (ARM_IC_DISABLE_IRQS_2, (u32) -1);

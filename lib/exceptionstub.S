@@ -20,6 +20,8 @@
 #include <circle/sysconfig.h>
 #include <circle/exception.h>
 
+    .set  F_BIT, 0x40
+
 	.macro	stub name, exception, pc_offset
 
 	.globl	\name
@@ -61,5 +63,12 @@ IRQStub:
 	stmfd	sp!, {r0-r12, lr}		/* save r0-r12 and return address */
 	bl	InterruptHandler
 	ldmfd	sp!, {r0-r12, pc}^		/* restore registers and return */
+
+    .globl __enable_fiq
+__enable_fiq:
+    mrs r0, cpsr
+    bic r0, r0, #F_BIT
+    msr cpsr_c, r0
+    bx lr
 
 /* End */
