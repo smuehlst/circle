@@ -59,6 +59,8 @@ _start:
 	mov	r0, #0
 	mcr	p15, 0, r0, c12, c0, 0		/* reset VBAR (if changed by u-boot) */
 #endif
+    cps #0x11               /* set fiq mode */
+    ldr sp, =MEM_FIQ_STACK
 	cps	#0x12				/* set irq mode */
 	ldr	sp, =MEM_IRQ_STACK
 	cps	#0x17				/* set abort mode */
