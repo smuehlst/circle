@@ -63,16 +63,8 @@ CInterruptSystem::~CInterruptSystem (void)
 	s_pThis = 0;
 }
 
-#if 0
-void __attribute__((interrupt("FIQ"))) __attribute__((naked)) FIQStub(void)
-{
-	PeripheralEntry ();
-
-	PeripheralExit();
-}
-#else
+// Resides currently directly in application
 extern void FIQStub(void);
-#endif
 
 boolean CInterruptSystem::Initialize (void)
 {
@@ -85,7 +77,7 @@ boolean CInterruptSystem::Initialize (void)
 #ifndef USE_RPI_STUB_AT
 	PeripheralEntry ();
 
-	// write32 (ARM_IC_FIQ_CONTROL, 0);
+	write32 (ARM_IC_FIQ_CONTROL, 0);
 
 	write32 (ARM_IC_DISABLE_IRQS_1, (u32) -1);
 	write32 (ARM_IC_DISABLE_IRQS_2, (u32) -1);
