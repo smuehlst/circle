@@ -27,7 +27,8 @@ endif
 RASPPI	?= 1
 PREFIX	?= arm-none-eabi-
 
-STDLIB_SUPPORT ?= 0
+# see: doc/stdlib-support.txt
+STDLIB_SUPPORT ?= 1
 
 CC	= $(PREFIX)gcc
 CPP	= $(PREFIX)g++
@@ -36,43 +37,42 @@ LD	= $(PREFIX)ld
 AR	= $(PREFIX)ar
 
 ifeq ($(strip $(RASPPI)),1)
-ARCH	?= -march=armv6k -mtune=arm1176jzf-s -mfloat-abi=hard
+ARCH	?= -march=armv6k -mtune=arm1176jzf-s -marm -mfloat-abi=hard
 TARGET	?= kernel
 else ifeq ($(strip $(RASPPI)),2)
-ARCH	?= -march=armv7-a -mfpu=neon-vfpv4 -mfloat-abi=hard
+ARCH	?= -march=armv7-a -marm -mfpu=neon-vfpv4 -mfloat-abi=hard
 TARGET	?= kernel7
 else
-ARCH	?= -march=armv8-a -mtune=cortex-a53 -mfpu=neon-fp-armv8 -mfloat-abi=hard
+ARCH	?= -march=armv8-a -mtune=cortex-a53 -marm -mfpu=neon-fp-armv8 -mfloat-abi=hard
 TARGET	?= kernel8-32
 endif
 
-LIBGCC	  != $(CPP) -mfloat-abi=hard -print-file-name=libgcc.a
-LIBGCC_EH != $(CPP) -mfloat-abi=hard -print-file-name=libgcc_eh.a
-LIBSTDCPP != $(CPP) -mfloat-abi=hard -print-file-name=libstdc++.a
-
-ifeq ($(strip $(STDLIB_SUPPORT)),0)
-CPPFLAGS+= -fno-exceptions -fno-rtti
-else ifeq ($(strip $(STDLIB_SUPPORT)),1)
-AFLAGS	+= -DSTDLIB_SUPPORT=$(STDLIB_SUPPORT)
-CFLAGS	+= -DSTDLIB_SUPPORT=$(STDLIB_SUPPORT)
-CPPFLAGS+= -fno-exceptions -fno-rtti
-else
-AFLAGS	+= -DSTDLIB_SUPPORT=$(STDLIB_SUPPORT)
-CFLAGS	+= -DSTDLIB_SUPPORT=$(STDLIB_SUPPORT)
+ifeq ($(strip $(STDLIB_SUPPORT)),3)
+LIBSTDCPP != $(CPP) $(ARCH) -print-file-name=libstdc++.a
 EXTRALIBS += $(LIBSTDCPP)
+LIBGCC_EH != $(CPP) $(ARCH) -print-file-name=libgcc_eh.a
 ifneq ($(strip $(LIBGCC_EH)),libgcc_eh.a)
 EXTRALIBS += $(LIBGCC_EH)
 endif
+else
+CPPFLAGS  += -fno-exceptions -fno-rtti -nostdinc++
+endif
+
+ifeq ($(strip $(STDLIB_SUPPORT)),0)
+CFLAGS	  += -nostdinc
+else
+LIBGCC	  != $(CPP) $(ARCH) -print-file-name=libgcc.a
+EXTRALIBS += $(LIBGCC)
 endif
 
 OPTIMIZE ?= -O2
 
 INCLUDE	+= -I $(CIRCLEHOME)/include -I $(CIRCLEHOME)/addon -I $(CIRCLEHOME)/app/lib
-EXTRALIBS += $(LIBGCC)
 
-AFLAGS	+= $(ARCH) -DRASPPI=$(RASPPI) $(INCLUDE)
+AFLAGS	+= $(ARCH) -DRASPPI=$(RASPPI) -DSTDLIB_SUPPORT=$(STDLIB_SUPPORT) $(INCLUDE)
 CFLAGS	+= $(ARCH) -Wall -fsigned-char -ffreestanding \
-	   -D__circle__ -DRASPPI=$(RASPPI) $(INCLUDE) $(OPTIMIZE) -g #-DNDEBUG
+	   -D__circle__ -DRASPPI=$(RASPPI) -DSTDLIB_SUPPORT=$(STDLIB_SUPPORT) \
+	   $(INCLUDE) $(OPTIMIZE) -g #-DNDEBUG
 CPPFLAGS+= $(CFLAGS) -std=c++14
 
 %.o: %.S
