@@ -139,8 +139,10 @@ void *malloc (size_t nSize)
 	{
 		pBlockHeader = (TBlockHeader *) s_pNextBlock;
 
-		s_pNextBlock += (sizeof (TBlockHeader) + nSize + BLOCK_ALIGN-1) & ~ALIGN_MASK;
-		if (s_pNextBlock > s_pBlockLimit-s_nBlockReserve)
+		unsigned char *pNextBlock = s_pNextBlock;
+		pNextBlock += (sizeof (TBlockHeader) + nSize + BLOCK_ALIGN-1) & ~ALIGN_MASK;
+
+		if (pNextBlock > s_pBlockLimit-s_nBlockReserve)
 		{
 			s_nBlockReserve = 0;
 
@@ -158,6 +160,8 @@ void *malloc (size_t nSize)
 
 			return 0;
 		}
+
+		s_pNextBlock = pNextBlock;
 	
 		pBlockHeader->nMagic = BLOCK_MAGIC;
 		pBlockHeader->nSize = (unsigned) nSize;
